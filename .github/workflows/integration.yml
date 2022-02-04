@@ -1,0 +1,26 @@
+name: Java CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Check maven build
+        if: hashFiles('pom.xml') != ''
+        uses: ./.github/actions/maven-build
+      - name: Check gradle build
+        if: hashFiles('gradlew') != ''
+        uses: ./.github/actions/gradle-build
+      - name: Fail if build system is not detected
+        if: hashFiles('pom.xml') == '' && hashFiles('gradlew') == ''
+        run: |
+          echo "No build system found"
+          exit 1

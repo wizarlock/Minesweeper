@@ -1,0 +1,16 @@
+name: 'Maven build'
+description: 'Run maven package'
+runs:
+  using: "composite"
+  steps:
+    - name: Run the Maven package task
+      shell: bash
+      run: mvn package --file pom.xml | tee mvn_out
+    - name: Check tests exists
+      shell: bash
+      run: |
+        if [[ -z $(cat mvn_out | grep -E "Tests run: [1-9]") ]]
+        then
+          echo "No tests found"
+          exit 1
+        fi

@@ -1,0 +1,17 @@
+name: 'Gradle build'
+description: 'Run gradle test'
+runs:
+  using: "composite"
+  steps:
+    - name: Run the Gradle test task
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: test
+    - name: Check test report exists # if project has no tests then report is not generated
+      shell: bash
+      run: |
+        if [[ -z $(find . -path "*build/test-results/test/TEST-*.xml") ]]
+        then
+          echo "No tests found"
+          exit 1
+        fi
