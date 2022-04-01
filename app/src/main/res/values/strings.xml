@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Checkers</string>
+    <string name="start">Start the game</string>
+    <string name="rules">Rules</string>
+    <string name="settings">Settings</string>
+    <string name="checkers">Russian checkers</string>
+    <string name="gamerules">Game Rules</string>
+    <string name="textrules">Checkers is played by two players. Each player begins the game with 12 colored discs . Whites moves first. Players then alternate moves, pieces always move diagonally.  A piece making a capturing move (a jump) leaps over one of the opponents pieces, landing in a straight diagonal line on the other side. If a simple checker reaches the last horizontal, it becomes a queen. Queens are able to move an arbitrary number of fields along the selected diagonal, both forward and backward. The winner is the side that managed to destroy or block the movement of all the opponents checkers</string>
+    <string name="my_link"><a href="https://en.wikipedia.org/wiki/Russian_draughts#Rules">Click here for full rules</a></string>
+    <string name="back">Back</string>
+    <string name="prestart">Write your names and choose a color</string>
+    <string name="startgame">Start</string>
+    <string name="endgamewhite">Whites win!</string>
+    <string name="endgameblack">Blacks win!</string>
+    <string name="mainmenu">Main menu</string>
+    <string name="rematch">Rematch</string>
+    <string name="music">Music</string>
+    <string name="hints">Hints</string>
+    <string name="sounds">Sounds</string>
+    <string name="off">OFF</string>
+    <string name="on">ON</string>
+    <string name="score">Score: 0</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
