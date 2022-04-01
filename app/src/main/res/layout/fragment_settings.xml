@@ -4,84 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beige"
+    android:background="@color/dirtyWhite"
     android:orientation="vertical"
     tools:context=".ui.Settings">
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".2"
+        app:srcCompat="@drawable/minesweeper" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="@string/settings"
         android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="60sp"
+        android:textColor="@color/black"
+        android:textSize="50sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/music"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/music"
-        android:textColor="@color/white"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
-        android:textSize="40sp"
-        android:thumb="@drawable/switch_thumb_background"
-        app:showText="true" />
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/sounds"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/music"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/sounds"
-        android:textColor="@color/white"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
-        android:textSize="40sp"
-        android:thumb="@drawable/switch_thumb_background"
-        android:track="@drawable/switchbackground"
-        app:showText="true" />
-
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/hints"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sounds"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/hints"
-        android:textColor="@color/white"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
-        android:textSize="40sp"
-        android:thumb="@drawable/switch_thumb_background"
-        app:showText="true" />
-
-    <Button
-        android:id="@+id/back"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/gray"
-        android:gravity="center_horizontal"
-        android:text="@string/back"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/type"
+        android:textColor="@color/black"
         android:textSize="30sp"
-        app:cornerRadius="15dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="2dp" />
+        android:textStyle="bold" />
 
 </RelativeLayout>
