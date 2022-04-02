@@ -31,11 +31,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/type"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <RadioGroup
+        android:id="@+id/gameTypeRG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:checkedButton="@+id/radio_button_1">
+
+        <RadioButton
+            android:id="@+id/newbie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text="@string/newbie"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <RadioButton
+            android:id="@+id/amateur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/amateur"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <RadioButton
+            android:id="@+id/professional"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/professional"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+    </RadioGroup>
 </RelativeLayout>
