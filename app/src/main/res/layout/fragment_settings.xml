@@ -52,7 +52,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/newbie"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="25sp" />
 
         <RadioButton
             android:id="@+id/amateur"
@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:text="@string/amateur"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="25sp" />
 
         <RadioButton
             android:id="@+id/professional"
@@ -68,6 +68,75 @@
             android:layout_height="match_parent"
             android:text="@string/professional"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="25sp" />
+
+        <RadioButton
+            android:id="@+id/special"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/special"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/fieldLengthText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gameTypeRG"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/fieldLength"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/fieldLength"
+        android:layout_width="100dp"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameTypeRG"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/fieldLengthText" />
+
+    <TextView
+        android:id="@+id/fieldWidthText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fieldLengthText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/fieldWidth"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/fieldWidth"
+        android:layout_width="100dp"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fieldLengthText"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/fieldWidthText" />
+
+    <TextView
+        android:id="@+id/numOfBombsText"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fieldWidthText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/numOfBombs"
+        android:textColor="@color/black"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/numOfBombs"
+        android:layout_width="100dp"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fieldWidthText"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/numOfBombsText" />
+
 </RelativeLayout>

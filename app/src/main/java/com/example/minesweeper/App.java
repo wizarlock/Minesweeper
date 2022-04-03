@@ -11,6 +11,9 @@ public class App extends Application {
     private static final String DIFFICULTY_PREFERENCES_KEY = "difficulty";
 
     private static App instance;
+    private int customFieldLength = 100;
+    private int customFieldWidth = 100;
+    private int customNumOfBombs = 100;
 
     @NonNull
     public static App getInstance() {
@@ -35,5 +38,55 @@ public class App extends Application {
                 .getInt(DIFFICULTY_PREFERENCES_KEY, GameDifficulty.getDefaultDifficulty().ordinal());
 
         return GameDifficulty.values()[ordinal];
+    }
+
+    public static Integer getFieldLength() {
+        switch (App.getInstance().getDifficulty()) {
+            case NEWBIE:
+                return 8;
+            case AMATEUR:
+                return 16;
+            case PROFESSIONAL:
+                return 30;
+            default:
+                return getInstance().customFieldLength;
+        }
+    }
+
+    public static Integer getFieldWidth() {
+        switch (App.getInstance().getDifficulty()) {
+            case NEWBIE:
+                return 8;
+            case AMATEUR:
+            case PROFESSIONAL:
+                return 16;
+            default:
+                return getInstance().customFieldWidth;
+        }
+    }
+
+    public static Integer getNumOfBombs() {
+        switch (App.getInstance().getDifficulty()) {
+            case NEWBIE:
+                return 10;
+            case AMATEUR:
+                return 40;
+            case PROFESSIONAL:
+                return 99;
+            default:
+                return getInstance().customNumOfBombs;
+        }
+    }
+
+    public static void setCustomFieldLength(int length) {
+        getInstance().customFieldLength = length;
+    }
+
+    public static void setCustomFieldWidth(int length) {
+        getInstance().customFieldWidth = length;
+    }
+
+    public static void setCustomNumOfBombs(int bombs) {
+        getInstance().customNumOfBombs = bombs;
     }
 }

@@ -16,3 +16,5 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 *.iml
+/app/build/generated/ap_generated_sources/debug/out/
+/app/build/generated/source/buildConfig/debug/

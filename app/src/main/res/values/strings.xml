@@ -10,6 +10,12 @@
     <string name="newbie">Newbie (field 8 by 8)</string>
     <string name="amateur">Amateur (field 16 by 16)</string>
     <string name="professional">Professional (field 30 by 16)</string>
+    <string name="special">Special (custom size)</string>
+    <string name="timer">00:00</string>
+    <string name="bombs">0</string>
+    <string name="fieldLength">field length:</string>
+    <string name="fieldWidth">field width:</string>
+    <string name="numOfBombs">bombs:</string>
     <string name="off">OFF</string>
     <string name="on">ON</string>
 </resources>

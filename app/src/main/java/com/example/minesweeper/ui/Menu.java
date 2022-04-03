@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.minesweeper.App;
 import com.example.minesweeper.R;
 import com.example.minesweeper.databinding.FragmentMenuBinding;
 
@@ -19,9 +20,6 @@ import java.util.Objects;
 public class Menu extends Fragment {
 
     private FragmentMenuBinding binding;
-
-    public Menu() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +41,8 @@ public class Menu extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.rulesButton.setOnClickListener(v -> replaceFragment(new Rules()));
         binding.settingsButton.setOnClickListener(v -> replaceFragment(new Settings()));
+        binding.settingsButton.setOnClickListener(v -> replaceFragment(new Settings()));
+        binding.startButton.setOnClickListener(v -> replaceFragment(new Game(App.getFieldLength(), App.getFieldWidth(), App.getNumOfBombs())));
     }
 
     @Override
