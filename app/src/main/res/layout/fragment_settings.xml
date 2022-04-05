@@ -93,11 +93,11 @@
     <EditText
         android:id="@+id/fieldLength"
         android:layout_width="100dp"
-        android:inputType="number"
         android:layout_height="wrap_content"
         android:layout_below="@id/gameTypeRG"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@id/fieldLengthText" />
+        android:layout_toEndOf="@id/fieldLengthText"
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/fieldWidthText"
@@ -113,14 +113,14 @@
     <EditText
         android:id="@+id/fieldWidth"
         android:layout_width="100dp"
-        android:inputType="number"
         android:layout_height="wrap_content"
         android:layout_below="@id/fieldLengthText"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/fieldWidthText" />
+        android:layout_toEndOf="@id/fieldWidthText"
+        android:inputType="number" />
 
     <TextView
-        android:id="@+id/numOfBombsText"
+        android:id="@+id/numOfMinesText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fieldWidthText"
@@ -131,12 +131,12 @@
         android:textSize="25sp" />
 
     <EditText
-        android:id="@+id/numOfBombs"
+        android:id="@+id/numOfMines"
         android:layout_width="100dp"
-        android:inputType="number"
         android:layout_height="wrap_content"
         android:layout_below="@id/fieldWidthText"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/numOfBombsText" />
+        android:layout_toEndOf="@id/numOfMinesText"
+        android:inputType="number" />
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ public class App extends Application {
     private static App instance;
     private int customFieldLength = 100;
     private int customFieldWidth = 100;
-    private int customNumOfBombs = 100;
+    private int customNumOfMines = 100;
 
     @NonNull
     public static App getInstance() {
@@ -65,7 +65,7 @@ public class App extends Application {
         }
     }
 
-    public static Integer getNumOfBombs() {
+    public static Integer getNumOfMines() {
         switch (App.getInstance().getDifficulty()) {
             case NEWBIE:
                 return 10;
@@ -74,7 +74,7 @@ public class App extends Application {
             case PROFESSIONAL:
                 return 99;
             default:
-                return getInstance().customNumOfBombs;
+                return getInstance().customNumOfMines;
         }
     }
 
@@ -86,7 +86,7 @@ public class App extends Application {
         getInstance().customFieldWidth = length;
     }
 
-    public static void setCustomNumOfBombs(int bombs) {
-        getInstance().customNumOfBombs = bombs;
+    public static void setCustomNumOfMines(int mines) {
+        getInstance().customNumOfMines = mines;
     }
 }
