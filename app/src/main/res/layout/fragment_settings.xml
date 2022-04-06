@@ -100,30 +100,30 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/fieldWidthText"
+        android:id="@+id/fieldHeightText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fieldLengthText"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/fieldWidth"
+        android:text="@string/fieldHeight"
         android:textColor="@color/black"
         android:textSize="25sp" />
 
     <EditText
-        android:id="@+id/fieldWidth"
+        android:id="@+id/fieldHeight"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/fieldLengthText"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/fieldWidthText"
+        android:layout_toEndOf="@id/fieldHeightText"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/numOfMinesText"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fieldWidthText"
+        android:layout_below="@+id/fieldHeightText"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/numOfBombs"
@@ -134,7 +134,7 @@
         android:id="@+id/numOfMines"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fieldWidthText"
+        android:layout_below="@id/fieldHeightText"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@id/numOfMinesText"
         android:inputType="number" />

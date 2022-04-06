@@ -8,9 +8,9 @@ public class Cell {
     private boolean open;
     private int nearbyMines;
 
-    public Cell(int x, int y, boolean marked, boolean open, boolean mined, int nearbyMines) {
-        this.x = x;
+    public Cell(int y, int x, boolean marked, boolean open, boolean mined, int nearbyMines) {
         this.y = y;
+        this.x = x;
         this.marked = marked;
         this.open = open;
         this.mined = mined;

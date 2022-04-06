@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,23 +22,20 @@ import com.example.minesweeper.databinding.FragmentGameBinding;
 import com.example.minesweeper.model.Board;
 import com.example.minesweeper.model.Cell;
 
-import java.util.Objects;
 
 
 public class Game extends Fragment implements ActionListener {
 
     private static FragmentGameBinding binding;
-    private int fieldLength;
-    private int fieldWidth;
-    private int numOfMines;
+    private final int fieldLength;
+    private final int fieldHeight;
+    private final int numOfMines;
 
-    public Game(int fieldLength, int fieldWidth, int numOfMines) {
+    public Game(int fieldLength, int fieldHeight, int numOfMines) {
         this.fieldLength = fieldLength;
-        this.fieldWidth = fieldWidth;
+        this.fieldHeight = fieldHeight;
         this.numOfMines = numOfMines;
     }
-
-    public final Board gameBoard = new Board(fieldLength, fieldWidth, numOfMines);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +49,14 @@ public class Game extends Fragment implements ActionListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         drawBoard();
+        final Board gameBoard = new Board(fieldLength, fieldHeight, numOfMines);
         gameBoard.board();
         gameBoard.setActionListener(Game.this);
+        for (int i = 0; i < fieldHeight; i++)
+            for (int j = 0; j < fieldLength; j++) {
+                ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
+                gr.getChildAt(j).setOnClickListener(gameBoard::startGame);
+            }
     }
 
     private static View findWithTag(ViewGroup parent, Object tag) {
@@ -63,26 +67,26 @@ public class Game extends Fragment implements ActionListener {
         return null;
     }
 
-    private static LinearLayout getCellLayout(Cell cell) {
-        LinearLayout row = (LinearLayout) findWithTag(binding.desk, String.valueOf(cell.getY()));
-        return Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
+    private static FrameLayout getCellLayout(Cell cell) {
+        LinearLayout row = (LinearLayout) findWithTag(binding.desk, cell.getY());
+        return (FrameLayout) findWithTag(row, cell.getX());
     }
 
     private void drawBoard() {
         LinearLayout desk = binding.desk;
-        for (int i = 0; i < fieldWidth; i++) {
+        for (int i = 0; i < fieldHeight; i++) {
             LinearLayout linearLayout = new LinearLayout(getContext());
             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             linearLayout.setTag(i);
-            desk.addView(linearLayout);
             for (int j = 0; j < fieldLength; j++) {
-                LinearLayout layout = new LinearLayout(getContext());
-                layout.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
+                FrameLayout layout = new FrameLayout(getContext());
+                layout.setLayoutParams(new FrameLayout.LayoutParams(100, 100));
                 layout.setBackgroundResource(R.drawable.cell);
                 layout.setTag(j);
                 linearLayout.addView(layout);
             }
+            desk.addView(linearLayout);
         }
     }
 
@@ -95,7 +99,7 @@ public class Game extends Fragment implements ActionListener {
 
     @Override
     public void mineAdded(Cell cell) {
-        LinearLayout layout = getCellLayout(cell);
+        FrameLayout layout = getCellLayout(cell);
         ImageView mineImage = new ImageView(requireContext());
         mineImage.setImageResource(R.drawable.mine);
         layout.addView(mineImage);
@@ -103,7 +107,7 @@ public class Game extends Fragment implements ActionListener {
 
     @Override
     public void numOfNearbyMinesAdded(Cell cell, Integer digit) {
-        LinearLayout layout = getCellLayout(cell);
+        FrameLayout layout = getCellLayout(cell);
         TextView digitView = new TextView(requireContext());
         digitView.setText(Integer.toString(digit));
         digitView.setWidth(100);

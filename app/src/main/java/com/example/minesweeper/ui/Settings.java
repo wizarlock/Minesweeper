@@ -79,7 +79,7 @@ public class Settings extends Fragment {
         });
 
         final int[] fieldLengthSpecial = {App.getFieldLength()};
-        final int[] fieldWidthSpecial = {App.getFieldWidth()};
+        final int[] fieldHeightSpecial = {App.getFieldHeight()};
         final int[] numOfMinesSpecial = {App.getNumOfMines()};
 
         final EditText editLength = binding.fieldLength;
@@ -93,7 +93,7 @@ public class Settings extends Fragment {
                     editLength.setText("100");
                     fieldLengthSpecial[0] = 100;
                 } else if (Integer.parseInt(editLength.getText().toString()) <= 1) {
-                    if (fieldWidthSpecial[0] != 1) {
+                    if (fieldHeightSpecial[0] != 1) {
                         editLength.setText("1");
                         fieldLengthSpecial[0] = 1;
                     } else {
@@ -106,26 +106,26 @@ public class Settings extends Fragment {
             return false;
         });
 
-        final EditText editWidth = binding.fieldWidth;
-        editWidth.setText(Integer.toString(fieldWidthSpecial[0]));
-        editWidth.setOnKeyListener((v, keyCode, event) -> {
+        final EditText editHeight = binding.fieldHeight;
+        editHeight.setText(Integer.toString(fieldHeightSpecial[0]));
+        editHeight.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                if (editWidth.getText().toString().equals("")) {
-                    editWidth.setText("100");
-                    fieldWidthSpecial[0] = 100;
-                } else if (Integer.parseInt(editWidth.getText().toString()) > 100) {
-                    editWidth.setText("100");
-                    fieldWidthSpecial[0] = 100;
-                } else if (Integer.parseInt(editWidth.getText().toString()) <= 1) {
+                if (editHeight.getText().toString().equals("")) {
+                    editHeight.setText("100");
+                    fieldHeightSpecial[0] = 100;
+                } else if (Integer.parseInt(editHeight.getText().toString()) > 100) {
+                    editHeight.setText("100");
+                    fieldHeightSpecial[0] = 100;
+                } else if (Integer.parseInt(editHeight.getText().toString()) <= 1) {
                     if (fieldLengthSpecial[0] != 1) {
-                        editWidth.setText("1");
-                        fieldWidthSpecial[0] = 1;
+                        editHeight.setText("1");
+                        fieldHeightSpecial[0] = 1;
                     } else {
-                        editWidth.setText("2");
-                        fieldWidthSpecial[0] = 2;
+                        editHeight.setText("2");
+                        fieldHeightSpecial[0] = 2;
                     }
-                } else fieldWidthSpecial[0] = Integer.parseInt(editWidth.getText().toString());
-                App.setCustomFieldWidth(fieldWidthSpecial[0]);
+                } else fieldHeightSpecial[0] = Integer.parseInt(editHeight.getText().toString());
+                App.setCustomFieldHeight(fieldHeightSpecial[0]);
             }
             return false;
         });
@@ -137,9 +137,9 @@ public class Settings extends Fragment {
                 if (editMines.getText().toString().equals("")) {
                     editMines.setText("1");
                     numOfMinesSpecial[0] = 1;
-                } else if (Integer.parseInt(editMines.getText().toString()) > (fieldWidthSpecial[0] * fieldLengthSpecial[0] - 1)) {
-                    editMines.setText(Integer.toString(fieldWidthSpecial[0] * fieldLengthSpecial[0] - 1));
-                    numOfMinesSpecial[0] = fieldWidthSpecial[0] * fieldLengthSpecial[0] - 1;
+                } else if (Integer.parseInt(editMines.getText().toString()) > (fieldHeightSpecial[0] * fieldLengthSpecial[0] - 1)) {
+                    editMines.setText(Integer.toString(fieldHeightSpecial[0] * fieldLengthSpecial[0] - 1));
+                    numOfMinesSpecial[0] = fieldHeightSpecial[0] * fieldLengthSpecial[0] - 1;
 
                 } else if (Integer.parseInt(editMines.getText().toString()) <= 0) {
                     editMines.setText("1");
@@ -154,8 +154,8 @@ public class Settings extends Fragment {
     private void visOfCustom(int visibility) {
         binding.fieldLengthText.setVisibility(visibility);
         binding.fieldLength.setVisibility(visibility);
-        binding.fieldWidth.setVisibility(visibility);
-        binding.fieldWidthText.setVisibility(visibility);
+        binding.fieldHeight.setVisibility(visibility);
+        binding.fieldHeightText.setVisibility(visibility);
         binding.numOfMines.setVisibility(visibility);
         binding.numOfMinesText.setVisibility(visibility);
     }

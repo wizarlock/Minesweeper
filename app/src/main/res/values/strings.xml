@@ -14,7 +14,7 @@
     <string name="timer">00:00</string>
     <string name="bombs">0</string>
     <string name="fieldLength">field length:</string>
-    <string name="fieldWidth">field width:</string>
+    <string name="fieldHeight">field height:</string>
     <string name="numOfBombs">bombs:</string>
     <string name="off">OFF</string>
     <string name="on">ON</string>

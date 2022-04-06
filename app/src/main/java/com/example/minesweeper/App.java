@@ -12,7 +12,7 @@ public class App extends Application {
 
     private static App instance;
     private int customFieldLength = 100;
-    private int customFieldWidth = 100;
+    private int customFieldHeight = 100;
     private int customNumOfMines = 100;
 
     @NonNull
@@ -53,7 +53,7 @@ public class App extends Application {
         }
     }
 
-    public static Integer getFieldWidth() {
+    public static Integer getFieldHeight() {
         switch (App.getInstance().getDifficulty()) {
             case NEWBIE:
                 return 8;
@@ -61,7 +61,7 @@ public class App extends Application {
             case PROFESSIONAL:
                 return 16;
             default:
-                return getInstance().customFieldWidth;
+                return getInstance().customFieldHeight;
         }
     }
 
@@ -82,8 +82,8 @@ public class App extends Application {
         getInstance().customFieldLength = length;
     }
 
-    public static void setCustomFieldWidth(int length) {
-        getInstance().customFieldWidth = length;
+    public static void setCustomFieldHeight(int height) {
+        getInstance().customFieldHeight = height;
     }
 
     public static void setCustomNumOfMines(int mines) {
