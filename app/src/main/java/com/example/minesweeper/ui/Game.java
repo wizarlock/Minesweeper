@@ -1,11 +1,13 @@
 package com.example.minesweeper.ui;
 
+import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,7 +58,9 @@ public class Game extends Fragment implements ActionListener {
             for (int j = 0; j < fieldLength; j++) {
                 ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
                 gr.getChildAt(j).setOnClickListener(gameBoard::startGame);
+                gr.getChildAt(j).setOnLongClickListener(gameBoard::placeFlag);
             }
+        binding.possibleFlags.setText(Integer.toString(fieldHeight * fieldLength));
     }
 
     private static View findWithTag(ViewGroup parent, Object tag) {
@@ -152,11 +156,43 @@ public class Game extends Fragment implements ActionListener {
     @Override
     public void markCell(Cell cell) {
         getCellLayout(cell).setBackgroundResource(R.drawable.flag);
+        int newText = Integer.parseInt(binding.possibleFlags.getText().toString()) - 1;
+        binding.possibleFlags.setText(Integer.toString(newText));
     }
 
     @Override
     public void unMarkCell(Cell cell) {
         getCellLayout(cell).setBackgroundResource(R.drawable.cell);
+        int newText = Integer.parseInt(binding.possibleFlags.getText().toString()) + 1;
+        binding.possibleFlags.setText(Integer.toString(newText));
+    }
+
+    private void build (AlertDialog.Builder builder) {
+        builder.setCancelable(false)
+                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                    FragmentTransaction ft = requireFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+                    ft.replace(R.id.frPlace, new Game(fieldLength, fieldHeight, numOfMines));
+                    ft.addToBackStack(null);
+                    ft.commit();
+                })
+                .setNegativeButton("No", (dialogInterface, i) -> requireFragmentManager().popBackStackImmediate());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void defeat() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("You lost the game. Shall we play again?");
+        build(builder);
+    }
+
+    @Override
+    public void winResult() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setMessage("You won the game. Shall we play again?");
+        build(builder);
     }
 }
 

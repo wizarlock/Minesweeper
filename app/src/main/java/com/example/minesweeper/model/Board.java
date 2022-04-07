@@ -133,12 +133,38 @@ public class Board {
         return coordinates;
     }
 
+    private boolean winResult() {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
+                if (!arrayOfAllCells.get(i).get(j).isOpen() && !arrayOfAllCells.get(i).get(j).isMined())
+                    return false;
+        return true;
+    }
+
     public void startGame(View view) {
-        if (firstMove) {
-            Cell cellForFirstClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag());
-            fieldRandomFilling(Objects.requireNonNull(cellForFirstClick));
-            fieldOpening(cellForFirstClick);
-            firstMove = !firstMove;
+        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag());
+        if (!Objects.requireNonNull(cellForClick).isMarked()) {
+            if (firstMove) {
+                fieldRandomFilling(cellForClick);
+                fieldOpening(cellForClick);
+                firstMove = !firstMove;
+            } else {
+                if (cellForClick.isMined()) {
+                    actionListener.mineAdded(cellForClick);
+                    actionListener.defeat();
+                } else fieldOpening(cellForClick);
+            }
+            if (winResult()) actionListener.winResult();
         }
+    }
+
+    public boolean placeFlag(View view) {
+        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag());
+        if (!Objects.requireNonNull(cellForClick).isOpen()) {
+            cellForClick.setMarked();
+            if (cellForClick.isMarked()) actionListener.markCell(cellForClick);
+            else actionListener.unMarkCell(cellForClick);
+        }
+        return true;
     }
 }

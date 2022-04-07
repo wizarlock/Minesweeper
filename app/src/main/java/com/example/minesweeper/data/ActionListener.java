@@ -12,4 +12,8 @@ public interface ActionListener {
     void markCell(Cell cell);
 
     void unMarkCell(Cell cell);
+
+    void defeat();
+
+    void winResult();
 }

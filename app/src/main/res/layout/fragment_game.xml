@@ -31,25 +31,25 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/bomb"
+        android:id="@+id/flag"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/timer"
-        app:srcCompat="@drawable/bombs" />
+        app:srcCompat="@drawable/possibleflags" />
 
     <TextView
-        android:id="@+id/numOfBombs"
+        android:id="@+id/possibleFlags"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="25dp"
-        android:layout_toEndOf="@+id/bomb"
-        android:text="@string/bombs"
+        android:layout_toEndOf="@+id/flag"
+        android:text="@string/numOfFlags"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
