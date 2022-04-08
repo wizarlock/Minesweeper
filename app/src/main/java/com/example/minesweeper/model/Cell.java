@@ -1,5 +1,7 @@
 package com.example.minesweeper.model;
 
+import androidx.annotation.Nullable;
+
 public class Cell {
     private final int x;
     private final int y;
@@ -55,6 +57,17 @@ public class Cell {
 
     public void setNearbyMines(int digit) {
         this.nearbyMines = digit;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if (!(other instanceof Cell)) return false;
+        if (this.getX() != ((Cell) other).getX()) return false;
+        if (this.getY() != ((Cell) other).getY()) return false;
+        if (this.isMarked() != ((Cell) other).isMarked()) return false;
+        if (this.isMined() != ((Cell) other).isMined()) return false;
+        if (this.isOpen() != ((Cell) other).isOpen()) return false;
+        return this.getNearbyMines().equals(((Cell) other).getNearbyMines());
     }
 
 }

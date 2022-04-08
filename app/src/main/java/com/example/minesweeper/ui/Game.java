@@ -24,6 +24,9 @@ import com.example.minesweeper.databinding.FragmentGameBinding;
 import com.example.minesweeper.model.Board;
 import com.example.minesweeper.model.Cell;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class Game extends Fragment implements ActionListener {
@@ -32,6 +35,8 @@ public class Game extends Fragment implements ActionListener {
     private final int fieldLength;
     private final int fieldHeight;
     private final int numOfMines;
+    private long startTime;
+    private Timer mTimer;
 
     public Game(int fieldLength, int fieldHeight, int numOfMines) {
         this.fieldLength = fieldLength;
@@ -50,6 +55,12 @@ public class Game extends Fragment implements ActionListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        startTime = System.currentTimeMillis();
+        mTimer = new Timer();
+        MyTimerTask mMyTimerTask = new MyTimerTask();
+        mTimer.schedule(mMyTimerTask, 0, 1000);
+
         drawBoard();
         final Board gameBoard = new Board(fieldLength, fieldHeight, numOfMines);
         gameBoard.board();
@@ -167,7 +178,7 @@ public class Game extends Fragment implements ActionListener {
         binding.possibleFlags.setText(Integer.toString(newText));
     }
 
-    private void build (AlertDialog.Builder builder) {
+    private void build(AlertDialog.Builder builder) {
         builder.setCancelable(false)
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     FragmentTransaction ft = requireFragmentManager().beginTransaction();
@@ -183,16 +194,33 @@ public class Game extends Fragment implements ActionListener {
 
     @Override
     public void defeat() {
+        mTimer.cancel();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("You lost the game. Shall we play again?");
+        builder.setMessage("You lost the game. Shall we play again? Time in game: " + getGameTime() + " seconds");
         build(builder);
     }
 
     @Override
     public void winResult() {
+        mTimer.cancel();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setMessage("You won the game. Shall we play again?");
+        builder.setMessage("You won the game. Shall we play again? Time in game: " + getGameTime() + " seconds");
         build(builder);
+    }
+
+    private long getGameTime() {
+        long endTime = System.currentTimeMillis();
+        return TimeUnit.MILLISECONDS.toSeconds(endTime - startTime);
+    }
+
+    class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            long time = getGameTime();
+            binding.timer.setText(Long.toString(time));
+        }
+
     }
 }
 
