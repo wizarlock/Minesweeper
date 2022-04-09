@@ -33,9 +33,8 @@ public class Board {
 
         for (int i = 0; i < rows; i++) {
             arrayOfAllCells.add(i, new ArrayList<>(columns));
-            for (int j = 0; j < columns; j++) {
+            for (int j = 0; j < columns; j++)
                 arrayOfAllCells.get(i).add(j, new Cell(i, j, false, false, false, 0));
-            }
         }
     }
 
@@ -43,12 +42,10 @@ public class Board {
         int counterMines = 0;
         List<Cell> possibleCellsForMines = new ArrayList<>();
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
                 if (!(i == cell.getY() && j == cell.getX()))
                     possibleCellsForMines.add(new Cell(i, j, false, false, false, 0));
-            }
-        }
         //Filling with mines
         while (counterMines != mines) {
             Random rand = new Random();
@@ -61,7 +58,7 @@ public class Board {
         possibleCellsForMines.add(cell);
         for (int i = 0; i < possibleCellsForMines.size(); i++) {
             Cell cellWithDigit = possibleCellsForMines.get(i);
-            List<Cell> neighbours = getNeighbours(initCoordinatesForAll(), cellWithDigit);
+            List<Cell> neighbours = getNeighbours(cellWithDigit);
             int counterNearbyMines = 0;
             for (int j = 0; j < neighbours.size(); j++)
                 if (neighbours.get(j).isMined()) counterNearbyMines++;
@@ -76,13 +73,14 @@ public class Board {
             if (cell.getNearbyMines() != 0)
                 actionListener.numOfNearbyMinesAdded(cell, cell.getNearbyMines());
             else {
-                List<Cell> neighbours = getNeighbours(initCoordinatesForHorizontalAndVertical(), cell);
+                List<Cell> neighbours = getNeighbours(cell);
                 for (int i = 0; i < neighbours.size(); i++) fieldOpening(neighbours.get(i));
             }
         }
     }
 
-    private List<Cell> getNeighbours(List<Coordinates> coordinates, Cell cell) {
+    public List<Cell> getNeighbours(Cell cell) {
+        List<Coordinates> coordinates = initCoordinates();
         List<Cell> neighbours = new ArrayList<>();
         for (Coordinates coordinate : coordinates) {
             Cell neighbour = getCell(cell.getY() + coordinate.getY(), cell.getX() + coordinate.getX());
@@ -101,7 +99,7 @@ public class Board {
         return posY < rows && posY >= 0 && posX < columns && posX >= 0;
     }
 
-    private List<Coordinates> initCoordinatesForAll() {
+    private List<Coordinates> initCoordinates() {
         List<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(-1, -1));
         coordinates.add(new Coordinates(-1, 1));
@@ -114,16 +112,7 @@ public class Board {
         return coordinates;
     }
 
-    private List<Coordinates> initCoordinatesForHorizontalAndVertical() {
-        List<Coordinates> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinates(1, 0));
-        coordinates.add(new Coordinates(-1, 0));
-        coordinates.add(new Coordinates(0, 1));
-        coordinates.add(new Coordinates(0, -1));
-        return coordinates;
-    }
-
-    private boolean winResult() {
+    public boolean winResult() {
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < columns; j++)
                 if (!arrayOfAllCells.get(i).get(j).isOpen() && !arrayOfAllCells.get(i).get(j).isMined())

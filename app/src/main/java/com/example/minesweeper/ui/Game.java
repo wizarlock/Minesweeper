@@ -110,6 +110,7 @@ public class Game extends Fragment implements ActionListener {
     public void onDetach() {
         super.onDetach();
         binding = null;
+        mTimer.cancel();
     }
 
     @Override
@@ -220,7 +221,6 @@ public class Game extends Fragment implements ActionListener {
             long time = getGameTime();
             binding.timer.setText(Long.toString(time));
         }
-
     }
 }
 
