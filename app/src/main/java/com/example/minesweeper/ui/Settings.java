@@ -38,6 +38,8 @@ public class Settings extends Fragment {
         binding.professional.setChecked(false);
         binding.special.setChecked(false);
 
+        binding.solver.setChecked(App.getSolver());
+
         switch (currentDifficulty) {
             case NEWBIE:
                 binding.newbie.setChecked(true);
@@ -76,6 +78,11 @@ public class Settings extends Fragment {
                     visOfCustom(View.VISIBLE);
                     break;
             }
+        });
+
+        binding.cheats.setOnCheckedChangeListener((group, checkId) -> {
+            if (checkId == R.id.solver)
+                App.setSolver();
         });
 
         final int[] fieldLengthSpecial = {App.getFieldLength()};

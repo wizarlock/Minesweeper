@@ -1,5 +1,7 @@
 package com.example.minesweeper;
 
+import static com.example.minesweeper.model.Cell.getCell;
+import static com.example.minesweeper.model.Cell.getNeighbours;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -17,8 +19,12 @@ import java.util.List;
 import java.util.Random;
 
 public class BoardTest implements ActionListener {
-    Board board8 = new Board(8, 8, 10);
-    Board board10 = new Board(10, 10, 99);
+    private final int fieldLengthForBoard8 = 8;
+    private final int fieldHeightForBoard8 = 8;
+    private final int fieldLengthForBoard10 = 10;
+    private final int fieldHeightForBoard10 = 10;
+    Board board8 = new Board(fieldLengthForBoard8, fieldHeightForBoard8, 10);
+    Board board10 = new Board(fieldLengthForBoard10, fieldHeightForBoard10, 99);
 
     private List<List<Cell>> newCells(Integer length, Integer height) {
         List<List<Cell>> newCells = new ArrayList<>(height);
@@ -57,36 +63,36 @@ public class BoardTest implements ActionListener {
     }
 
     @Test
-    public void getCell() {
+    public void getterCell() {
         List<List<Cell>> cells8 = newCells(8, 8);
         board8.board();
-        assertEquals(board8.getCell(5, 5), cells8.get(5).get(5));
-        assertNotEquals(board8.getCell(5, 5), cells8.get(1).get(1));
-        assertEquals(board8.getCell(0, 0), cells8.get(0).get(0));
-        assertNotEquals(board8.getCell(5, 5), null);
-        assertNull(board8.getCell(-1, 4));
-        assertNull(board8.getCell(4, -1));
-        assertNull(board8.getCell(-1, -1));
-        assertNull(board8.getCell(8, 8));
-        assertNull(board8.getCell(20, 5));
-        assertNull(board8.getCell(5, 20));
+        assertEquals(getCell(5, 5, fieldLengthForBoard8, fieldHeightForBoard8), cells8.get(5).get(5));
+        assertNotEquals(getCell(5, 5, fieldLengthForBoard8, fieldHeightForBoard8), cells8.get(1).get(1));
+        assertEquals(getCell(0, 0, fieldLengthForBoard8, fieldHeightForBoard8), cells8.get(0).get(0));
+        assertNotEquals(getCell(5, 5, fieldLengthForBoard8, fieldHeightForBoard8), null);
+        assertNull(getCell(-1, 4, fieldLengthForBoard8, fieldHeightForBoard8));
+        assertNull(getCell(4, -1, fieldLengthForBoard8, fieldHeightForBoard8));
+        assertNull(getCell(-1, -1, fieldLengthForBoard8, fieldHeightForBoard8));
+        assertNull(getCell(8, 8, fieldLengthForBoard8, fieldHeightForBoard8));
+        assertNull(getCell(20, 5, fieldLengthForBoard8, fieldHeightForBoard8));
+        assertNull(getCell(5, 20, fieldLengthForBoard8, fieldHeightForBoard8));
 
         List<List<Cell>> cells10 = newCells(10, 10);
         board10.board();
-        assertEquals(board10.getCell(7, 3), cells10.get(7).get(3));
-        assertNotEquals(board10.getCell(7, 3), cells10.get(5).get(4));
-        assertEquals(board10.getCell(9, 9), cells10.get(9).get(9));
-        assertNotEquals(board10.getCell(6, 1), null);
-        assertNull(board10.getCell(-1, 5));
-        assertNull(board10.getCell(5, -1));
-        assertNull(board10.getCell(-1, -1));
-        assertNull(board10.getCell(10, 10));
-        assertNull(board10.getCell(20, 5));
-        assertNull(board10.getCell(5, 20));
+        assertEquals(getCell(7, 3, fieldLengthForBoard10, fieldHeightForBoard10), cells10.get(7).get(3));
+        assertNotEquals(getCell(7, 3, fieldLengthForBoard10, fieldHeightForBoard10), cells10.get(5).get(4));
+        assertEquals(getCell(9, 9, fieldLengthForBoard10, fieldHeightForBoard10), cells10.get(9).get(9));
+        assertNotEquals(getCell(6, 1, fieldLengthForBoard10, fieldHeightForBoard10), null);
+        assertNull(getCell(-1, 5, fieldLengthForBoard10, fieldHeightForBoard10));
+        assertNull(getCell(5, -1, fieldLengthForBoard10, fieldHeightForBoard10));
+        assertNull(getCell(-1, -1, fieldLengthForBoard10, fieldHeightForBoard10));
+        assertNull(getCell(10, 10, fieldLengthForBoard10, fieldHeightForBoard10));
+        assertNull(getCell(20, 5, fieldLengthForBoard10, fieldHeightForBoard10));
+        assertNull(getCell(5, 20, fieldLengthForBoard10, fieldHeightForBoard10));
     }
 
     @Test
-    public void getNeighbours() {
+    public void getterNeighbours() {
         List<List<Cell>> cells8 = newCells(8, 8);
         board8.board();
         List<Cell> neighbours = new ArrayList<>();
@@ -94,21 +100,21 @@ public class BoardTest implements ActionListener {
         neighbours.add(cells8.get(1).get(0));
         neighbours.add(cells8.get(1).get(2));
         neighbours.add(cells8.get(2).get(1));
-        assertFalse(assertListEquals(neighbours, board8.getNeighbours(Board.arrayOfAllCells.get(1).get(1))));
+        assertFalse(assertListEquals(neighbours, getNeighbours(Board.arrayOfAllCells.get(1).get(1), fieldLengthForBoard8, fieldHeightForBoard8)));
 
         neighbours.add(cells8.get(0).get(0));
         neighbours.add(cells8.get(0).get(2));
         neighbours.add(cells8.get(2).get(0));
         neighbours.add(cells8.get(2).get(2));
-        assertTrue(assertListEquals(neighbours, board8.getNeighbours(Board.arrayOfAllCells.get(1).get(1))));
+        assertTrue(assertListEquals(neighbours, getNeighbours(Board.arrayOfAllCells.get(1).get(1), fieldLengthForBoard8, fieldHeightForBoard8)));
 
         neighbours.clear();
         neighbours.add(cells8.get(0).get(1));
         neighbours.add(cells8.get(1).get(0));
-        assertFalse(assertListEquals(neighbours, board8.getNeighbours(Board.arrayOfAllCells.get(0).get(0))));
+        assertFalse(assertListEquals(neighbours, getNeighbours(Board.arrayOfAllCells.get(0).get(0), fieldLengthForBoard8, fieldHeightForBoard8)));
 
         neighbours.add(cells8.get(1).get(1));
-        assertTrue(assertListEquals(neighbours, board8.getNeighbours(Board.arrayOfAllCells.get(0).get(0))));
+        assertTrue(assertListEquals(neighbours, getNeighbours(Board.arrayOfAllCells.get(0).get(0), fieldLengthForBoard8, fieldHeightForBoard8)));
     }
 
     @Test
@@ -123,7 +129,7 @@ public class BoardTest implements ActionListener {
                     if (Board.arrayOfAllCells.get(j).get(k).isMined()) minesCounter++;
                     else {
                         long nearbyMinesCounter = 0;
-                        List<Cell> neighbours = board8.getNeighbours(Board.arrayOfAllCells.get(j).get(k));
+                        List<Cell> neighbours = getNeighbours(Board.arrayOfAllCells.get(j).get(k), fieldLengthForBoard8, fieldHeightForBoard8);
                         for (int l = 0; l < neighbours.size(); l++)
                             if (neighbours.get(l).isMined()) nearbyMinesCounter++;
                         assertEquals(Integer.toUnsignedLong(Board.arrayOfAllCells.get(j).get(k).getNearbyMines()), nearbyMinesCounter);
@@ -138,7 +144,7 @@ public class BoardTest implements ActionListener {
                     if (Board.arrayOfAllCells.get(j).get(k).isMined()) minesCounter++;
                     else {
                         long nearbyMinesCounter = 0;
-                        List<Cell> neighbours = board10.getNeighbours(Board.arrayOfAllCells.get(j).get(k));
+                        List<Cell> neighbours = getNeighbours(Board.arrayOfAllCells.get(j).get(k), fieldLengthForBoard10, fieldHeightForBoard10);
                         for (int l = 0; l < neighbours.size(); l++)
                             if (neighbours.get(l).isMined()) nearbyMinesCounter++;
                         assertEquals(Integer.toUnsignedLong(Board.arrayOfAllCells.get(j).get(k).getNearbyMines()), nearbyMinesCounter);

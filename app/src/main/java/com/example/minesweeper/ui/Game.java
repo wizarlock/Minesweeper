@@ -23,6 +23,7 @@ import com.example.minesweeper.data.ActionListener;
 import com.example.minesweeper.databinding.FragmentGameBinding;
 import com.example.minesweeper.model.Board;
 import com.example.minesweeper.model.Cell;
+import com.example.minesweeper.model.Solver;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,13 +36,15 @@ public class Game extends Fragment implements ActionListener {
     private final int fieldLength;
     private final int fieldHeight;
     private final int numOfMines;
+    private final boolean solver;
     private long startTime;
     private Timer mTimer;
 
-    public Game(int fieldLength, int fieldHeight, int numOfMines) {
+    public Game(int fieldLength, int fieldHeight, int numOfMines, boolean solver) {
         this.fieldLength = fieldLength;
         this.fieldHeight = fieldHeight;
         this.numOfMines = numOfMines;
+        this.solver = solver;
     }
 
     @Override
@@ -62,19 +65,29 @@ public class Game extends Fragment implements ActionListener {
         mTimer.schedule(mMyTimerTask, 0, 1000);
 
         drawBoard();
+        binding.possibleFlags.setText(Integer.toString(fieldHeight * fieldLength));
         final Board gameBoard = new Board(fieldLength, fieldHeight, numOfMines);
         gameBoard.board();
         gameBoard.setActionListener(Game.this);
-        for (int i = 0; i < fieldHeight; i++)
-            for (int j = 0; j < fieldLength; j++) {
-                ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
-                gr.getChildAt(j).setOnClickListener(gameBoard::startGame);
-                gr.getChildAt(j).setOnLongClickListener(gameBoard::placeFlag);
+
+        if (!solver)
+            for (int i = 0; i < fieldHeight; i++)
+                for (int j = 0; j < fieldLength; j++) {
+                    ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
+                    gr.getChildAt(j).setOnClickListener(gameBoard::startGame);
+                    gr.getChildAt(j).setOnLongClickListener(gameBoard::placeFlag);
+                }
+        else {
+            Solver gameSolver = new Solver(fieldLength, fieldHeight, numOfMines);
+            Cell cellForClick = gameSolver.solve(Board.arrayOfAllCells);
+            while (cellForClick != null) {
+                gameBoard.startGame(getCellLayout(cellForClick));
+                cellForClick = gameSolver.solve(Board.arrayOfAllCells);
             }
-        binding.possibleFlags.setText(Integer.toString(fieldHeight * fieldLength));
+        }
     }
 
-    private static View findWithTag(ViewGroup parent, Object tag) {
+    public static View findWithTag(ViewGroup parent, Object tag) {
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (parent.getChildAt(i).getTag().equals(tag))
                 return parent.getChildAt(i);
@@ -184,7 +197,7 @@ public class Game extends Fragment implements ActionListener {
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     FragmentTransaction ft = requireFragmentManager().beginTransaction();
                     ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-                    ft.replace(R.id.frPlace, new Game(fieldLength, fieldHeight, numOfMines));
+                    ft.replace(R.id.frPlace, new Game(fieldLength, fieldHeight, numOfMines, solver));
                     ft.addToBackStack(null);
                     ft.commit();
                 })

@@ -7,6 +7,8 @@
     <string name="gamerules">Game Rules</string>
     <string name="textrules">In Minesweeper, mines are scattered throughout a board, which is divided into cells. Cells have three states: uncovered, covered and flagged.\n A player clicks on cell to uncover it. If a player uncovers a mined cell, the game ends. Otherwise, the uncovered cell displays either a number, indicating the number of mines diagonally and/or adjacent to it, or a blank tile, and all adjacent non-mined cells will automatically be uncovered. Clicking with flag on a cell will flag it, causing a flag to appear on it. Flagged cells are still considered covered, and a player can click on them to uncover them.\n The first click in any game will never be a mine.\n To win the game, players must uncover all non-mine cells, at which point, the timer is stopped. </string>
     <string name="type">Game type:</string>
+    <string name="solver">Solver (solves the game)</string>
+    <string name="cheats">Cheats:</string>
     <string name="newbie">Newbie (field 8 by 8)</string>
     <string name="amateur">Amateur (field 16 by 16)</string>
     <string name="professional">Professional (field 30 by 16)</string>

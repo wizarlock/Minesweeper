@@ -42,7 +42,7 @@ public class Menu extends Fragment {
         binding.rulesButton.setOnClickListener(v -> replaceFragment(new Rules()));
         binding.settingsButton.setOnClickListener(v -> replaceFragment(new Settings()));
         binding.settingsButton.setOnClickListener(v -> replaceFragment(new Settings()));
-        binding.startButton.setOnClickListener(v -> replaceFragment(new Game(App.getFieldLength(), App.getFieldHeight(), App.getNumOfMines())));
+        binding.startButton.setOnClickListener(v -> replaceFragment(new Game(App.getFieldLength(), App.getFieldHeight(), App.getNumOfMines(), App.getSolver())));
     }
 
     @Override

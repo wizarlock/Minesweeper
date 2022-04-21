@@ -1,6 +1,11 @@
 package com.example.minesweeper.model;
 
+import static com.example.minesweeper.model.Board.arrayOfAllCells;
+
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cell {
     private final int x;
@@ -59,6 +64,40 @@ public class Cell {
         this.nearbyMines = digit;
     }
 
+    private static List<Coordinates> initCoordinates() {
+        List<Coordinates> coordinates = new ArrayList<>();
+        coordinates.add(new Coordinates(-1, -1));
+        coordinates.add(new Coordinates(-1, 1));
+        coordinates.add(new Coordinates(1, -1));
+        coordinates.add(new Coordinates(1, 1));
+        coordinates.add(new Coordinates(1, 0));
+        coordinates.add(new Coordinates(-1, 0));
+        coordinates.add(new Coordinates(0, 1));
+        coordinates.add(new Coordinates(0, -1));
+        return coordinates;
+    }
+
+    public static List<Cell> getNeighbours(Cell cell, int fieldLength, int fieldHeight) {
+        List<Coordinates> coordinates = initCoordinates();
+        List<Cell> neighbours = new ArrayList<>();
+        for (Coordinates coordinate : coordinates) {
+            Cell neighbour = getCell(cell.getY() + coordinate.getY(), cell.getX() + coordinate.getX(),
+                    fieldLength, fieldHeight);
+            if (neighbour != null) neighbours.add(neighbour);
+        }
+        return neighbours;
+    }
+
+    public static Cell getCell(int posY, int posX, int fieldLength, int fieldHeight) {
+        if (cellExist(posY, posX, fieldLength, fieldHeight))
+            return arrayOfAllCells.get(posY).get(posX);
+        else return null;
+    }
+
+    private static boolean cellExist(int posY, int posX, int fieldLength, int fieldHeight) {
+        return posY < fieldHeight && posY >= 0 && posX < fieldLength && posX >= 0;
+    }
+
     @Override
     public boolean equals(@Nullable Object other) {
         if (!(other instanceof Cell)) return false;
@@ -69,5 +108,4 @@ public class Cell {
         if (this.isOpen() != ((Cell) other).isOpen()) return false;
         return this.getNearbyMines().equals(((Cell) other).getNearbyMines());
     }
-
 }

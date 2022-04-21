@@ -14,6 +14,7 @@ public class App extends Application {
     private int customFieldLength = 100;
     private int customFieldHeight = 100;
     private int customNumOfMines = 100;
+    private boolean solver = false;
 
     @NonNull
     public static App getInstance() {
@@ -88,5 +89,13 @@ public class App extends Application {
 
     public static void setCustomNumOfMines(int mines) {
         getInstance().customNumOfMines = mines;
+    }
+
+    public static void setSolver() {
+        getInstance().solver = !getInstance().solver;
+    }
+
+    public static boolean getSolver() {
+        return getInstance().solver;
     }
 }

@@ -1,5 +1,8 @@
 package com.example.minesweeper.model;
 
+import static com.example.minesweeper.model.Cell.getCell;
+import static com.example.minesweeper.model.Cell.getNeighbours;
+
 import android.view.View;
 
 import com.example.minesweeper.data.ActionListener;
@@ -17,9 +20,9 @@ public class Board {
     private boolean firstMove = true;
 
     public Board(int fieldLength, int fieldHeight, int numOfMines) {
-        this.rows = fieldHeight;
-        this.columns = fieldLength;
-        this.mines = numOfMines;
+        rows = fieldHeight;
+        columns = fieldLength;
+        mines = numOfMines;
     }
 
     public void setActionListener(ActionListener actionListener) {
@@ -58,7 +61,7 @@ public class Board {
         possibleCellsForMines.add(cell);
         for (int i = 0; i < possibleCellsForMines.size(); i++) {
             Cell cellWithDigit = possibleCellsForMines.get(i);
-            List<Cell> neighbours = getNeighbours(cellWithDigit);
+            List<Cell> neighbours = getNeighbours(cellWithDigit, columns, rows);
             int counterNearbyMines = 0;
             for (int j = 0; j < neighbours.size(); j++)
                 if (neighbours.get(j).isMined()) counterNearbyMines++;
@@ -73,43 +76,10 @@ public class Board {
             if (cell.getNearbyMines() != 0)
                 actionListener.numOfNearbyMinesAdded(cell, cell.getNearbyMines());
             else {
-                List<Cell> neighbours = getNeighbours(cell);
+                List<Cell> neighbours = getNeighbours(cell, columns, rows);
                 for (int i = 0; i < neighbours.size(); i++) fieldOpening(neighbours.get(i));
             }
         }
-    }
-
-    public List<Cell> getNeighbours(Cell cell) {
-        List<Coordinates> coordinates = initCoordinates();
-        List<Cell> neighbours = new ArrayList<>();
-        for (Coordinates coordinate : coordinates) {
-            Cell neighbour = getCell(cell.getY() + coordinate.getY(), cell.getX() + coordinate.getX());
-            if (neighbour != null) neighbours.add(neighbour);
-        }
-        return neighbours;
-    }
-
-
-    public Cell getCell(int posY, int posX) {
-        if (cellExist(posY, posX)) return arrayOfAllCells.get(posY).get(posX);
-        else return null;
-    }
-
-    private boolean cellExist(int posY, int posX) {
-        return posY < rows && posY >= 0 && posX < columns && posX >= 0;
-    }
-
-    private List<Coordinates> initCoordinates() {
-        List<Coordinates> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinates(-1, -1));
-        coordinates.add(new Coordinates(-1, 1));
-        coordinates.add(new Coordinates(1, -1));
-        coordinates.add(new Coordinates(1, 1));
-        coordinates.add(new Coordinates(1, 0));
-        coordinates.add(new Coordinates(-1, 0));
-        coordinates.add(new Coordinates(0, 1));
-        coordinates.add(new Coordinates(0, -1));
-        return coordinates;
     }
 
     public boolean winResult() {
@@ -121,7 +91,7 @@ public class Board {
     }
 
     public void startGame(View view) {
-        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag());
+        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag(), columns, rows);
         if (!Objects.requireNonNull(cellForClick).isMarked()) {
             if (firstMove) {
                 fieldRandomFilling(cellForClick);
@@ -138,7 +108,7 @@ public class Board {
     }
 
     public boolean placeFlag(View view) {
-        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag());
+        Cell cellForClick = getCell((int) ((View) view.getParent()).getTag(), (int) view.getTag(), columns, rows);
         if (!Objects.requireNonNull(cellForClick).isOpen()) {
             cellForClick.setMarked();
             if (cellForClick.isMarked()) actionListener.markCell(cellForClick);
