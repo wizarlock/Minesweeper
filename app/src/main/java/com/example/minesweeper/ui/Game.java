@@ -25,9 +25,11 @@ import com.example.minesweeper.model.Board;
 import com.example.minesweeper.model.Cell;
 import com.example.minesweeper.model.Solver;
 
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Game extends Fragment implements ActionListener {
@@ -37,6 +39,7 @@ public class Game extends Fragment implements ActionListener {
     private final int fieldHeight;
     private final int numOfMines;
     private final boolean solver;
+    private boolean gameIsEnd = false;
     private long startTime;
     private Timer mTimer;
 
@@ -79,11 +82,27 @@ public class Game extends Fragment implements ActionListener {
                 }
         else {
             Solver gameSolver = new Solver(fieldLength, fieldHeight, numOfMines);
-            Cell cellForClick = gameSolver.solve(Board.arrayOfAllCells);
-            while (cellForClick != null) {
-                gameBoard.startGame(getCellLayout(cellForClick));
-                cellForClick = gameSolver.solve(Board.arrayOfAllCells);
-            }
+
+            new Thread(() -> {
+                Map<Cell, Integer> map = gameSolver.solve(Board.arrayOfAllCells);
+                gameIsEnd:
+                while (!map.isEmpty()) {
+                    for (Map.Entry<Cell, Integer> entry : map.entrySet()) {
+                        requireActivity().runOnUiThread(() -> {
+                            if (entry.getValue() == 0) {
+                                gameBoard.startGame(getCellLayout(entry.getKey()));
+                            } else gameBoard.placeFlag(getCellLayout(entry.getKey()));
+                        });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (gameIsEnd) break gameIsEnd;
+                    }
+                    map = gameSolver.solve(Board.arrayOfAllCells);
+                }
+            }).start();
         }
     }
 
@@ -117,7 +136,6 @@ public class Game extends Fragment implements ActionListener {
             desk.addView(linearLayout);
         }
     }
-
 
     @Override
     public void onDetach() {
@@ -193,6 +211,7 @@ public class Game extends Fragment implements ActionListener {
     }
 
     private void build(AlertDialog.Builder builder) {
+        gameIsEnd = true;
         builder.setCancelable(false)
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
                     FragmentTransaction ft = requireFragmentManager().beginTransaction();
