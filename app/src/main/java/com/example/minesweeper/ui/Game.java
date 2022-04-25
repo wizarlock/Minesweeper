@@ -92,7 +92,7 @@ public class Game extends Fragment implements ActionListener {
                                 gameBoard.startGame(getCellLayout(entry.getKey()));
                             } else gameBoard.placeFlag(getCellLayout(entry.getKey()));
                         try {
-                            Thread.sleep(5);
+                            Thread.sleep(300);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

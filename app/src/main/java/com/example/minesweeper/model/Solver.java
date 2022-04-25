@@ -1,6 +1,5 @@
 package com.example.minesweeper.model;
 
-import static com.example.minesweeper.model.Board.arrayOfAllCells;
 import static com.example.minesweeper.model.Cell.getNeighbours;
 
 import java.util.ArrayList;
@@ -38,36 +37,6 @@ public class Solver {
                 randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
             solution.put(randomCell, 0);
         }
-        /*arrayOfAllCells.get(0).get(0).setOpen();
-        arrayOfAllCells.get(0).get(0).setNearbyMines(0);
-
-        arrayOfAllCells.get(0).get(1).setOpen();
-        arrayOfAllCells.get(0).get(1).setNearbyMines(1);
-
-        arrayOfAllCells.get(0).get(2).setMarked();
-
-        arrayOfAllCells.get(1).get(0).setOpen();
-        arrayOfAllCells.get(1).get(0).setNearbyMines(0);
-
-        arrayOfAllCells.get(1).get(1).setOpen();
-        arrayOfAllCells.get(1).get(1).setNearbyMines(2);
-
-        arrayOfAllCells.get(1).get(2).setOpen();
-        arrayOfAllCells.get(1).get(2).setNearbyMines(3);
-
-        arrayOfAllCells.get(2).get(0).setOpen();
-        arrayOfAllCells.get(2).get(0).setNearbyMines(1);
-
-        arrayOfAllCells.get(2).get(1).setOpen();
-        arrayOfAllCells.get(2).get(1).setNearbyMines(2);
-
-        arrayOfAllCells.get(2).get(2).setMarked();
-
-        arrayOfAllCells.get(3).get(2).setOpen();
-        arrayOfAllCells.get(3).get(2).setNearbyMines(2);
-
-        List<GroupOfCells> gr = createGroups(arrayOfAllCells);
-        getSolution(gr);*/
         return solution;
     }
 
@@ -117,7 +86,6 @@ public class Solver {
                     if (parent.getGroup().containsAll(child.getGroup())) {
                         groups.set(indexOfParent, subtraction(parent, child));
                         repeat = true;
-                        System.out.println(" I m loh I will delete in loop");
                         removeAllDuplicates(groups);
                     } else if (isOverlaps(parent, child)) {
                         if (groupI.getNumOfMines() > groupJ.getNumOfMines()) {
@@ -185,18 +153,6 @@ public class Solver {
 
         groups.clear();
         groups.addAll(helperSet);
-//        Set<Integer> helperSet = new HashSet<>();
-//        for (int i = 0; i < groups.size() - 1; i++)
-//            for (int j = i + 1; j < groups.size(); j++)
-//                if (groups.get(i).equals(groups.get(j)))
-//                    helperSet.add(j);
-//
-//        List<Integer> helperList = new ArrayList<>(helperSet);
-//        for (int i = helperList.size() - 1; i >= 0; i--) {
-//            System.out.println("size" + helperList.size());
-//            System.out.println("index" + i);
-//            groups.remove((int) helperList.get(i));
-//        }
     }
 
     private Map<Cell, Integer> checkForClick(List<GroupOfCells> groups) {

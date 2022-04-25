@@ -212,10 +212,6 @@ public class BoardTest implements ActionListener {
         assertTrue(assertListEquals(openCellsManually, openCellsProgrammatically));
     }
 
-    @Test
-    public void failTest() {
-        assertTrue(false);
-    }
 
     @Test
     public void winResultTest() {
