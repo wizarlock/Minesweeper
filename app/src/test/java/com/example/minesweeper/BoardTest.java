@@ -213,6 +213,11 @@ public class BoardTest implements ActionListener {
     }
 
     @Test
+    public void failTest() {
+        assertTrue(false);
+    }
+
+    @Test
     public void winResultTest() {
         board10.board();
         board10.setActionListener(BoardTest.this);
