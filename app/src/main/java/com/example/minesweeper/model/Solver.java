@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 
 public class Solver {
-
     private final int rows;
     private final int columns;
     private final int mines;
@@ -31,7 +31,43 @@ public class Solver {
         solution = getSolution(groups);
         if (firstMove) solution.put(allCells.get(0).get(0), 0);
         firstMove = false;
-        if (solution.isEmpty()) solution = getSolutionUsingProbability(groups);;
+        if (solution.isEmpty()) solution = getSolutionUsingProbability(groups);
+        if (solution.isEmpty()) {
+            Cell randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
+            while (randomCell.isOpen() || randomCell.isMarked())
+                randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
+            solution.put(randomCell, 0);
+        }
+        /*arrayOfAllCells.get(0).get(0).setOpen();
+        arrayOfAllCells.get(0).get(0).setNearbyMines(0);
+
+        arrayOfAllCells.get(0).get(1).setOpen();
+        arrayOfAllCells.get(0).get(1).setNearbyMines(1);
+
+        arrayOfAllCells.get(0).get(2).setMarked();
+
+        arrayOfAllCells.get(1).get(0).setOpen();
+        arrayOfAllCells.get(1).get(0).setNearbyMines(0);
+
+        arrayOfAllCells.get(1).get(1).setOpen();
+        arrayOfAllCells.get(1).get(1).setNearbyMines(2);
+
+        arrayOfAllCells.get(1).get(2).setOpen();
+        arrayOfAllCells.get(1).get(2).setNearbyMines(3);
+
+        arrayOfAllCells.get(2).get(0).setOpen();
+        arrayOfAllCells.get(2).get(0).setNearbyMines(1);
+
+        arrayOfAllCells.get(2).get(1).setOpen();
+        arrayOfAllCells.get(2).get(1).setNearbyMines(2);
+
+        arrayOfAllCells.get(2).get(2).setMarked();
+
+        arrayOfAllCells.get(3).get(2).setOpen();
+        arrayOfAllCells.get(3).get(2).setNearbyMines(2);
+
+        List<GroupOfCells> gr = createGroups(arrayOfAllCells);
+        getSolution(gr);*/
         return solution;
     }
 
@@ -60,8 +96,8 @@ public class Solver {
     private Map<Cell, Integer> getSolution(List<GroupOfCells> groups) {
         Map<Cell, Integer> solution;
         boolean repeat;
+        removeAllDuplicates(groups);
         do {
-            removeAllDuplicates(groups);
             repeat = false;
             for (int i = 0; i < groups.size() - 1; i++)
                 for (int j = i + 1; j < groups.size(); j++) {
@@ -81,6 +117,8 @@ public class Solver {
                     if (parent.getGroup().containsAll(child.getGroup())) {
                         groups.set(indexOfParent, subtraction(parent, child));
                         repeat = true;
+                        System.out.println(" I m loh I will delete in loop");
+                        removeAllDuplicates(groups);
                     } else if (isOverlaps(parent, child)) {
                         if (groupI.getNumOfMines() > groupJ.getNumOfMines()) {
                             parent = groupI;
@@ -143,15 +181,22 @@ public class Solver {
     }
 
     private void removeAllDuplicates(List<GroupOfCells> groups) {
-        Set<Integer> helperSet = new HashSet<>();
-        for (int i = 0; i < groups.size() - 1; i++)
-            for (int j = i + 1; j < groups.size(); j++)
-                if (groups.get(i).equals(groups.get(j)))
-                    helperSet.add(j);
+        Set<GroupOfCells> helperSet = new HashSet<>(groups);
 
-        List<Integer> helperList = new ArrayList<>(helperSet);
-        for (int i = helperList.size() - 1; i >= 0; i--)
-            groups.remove((int) helperList.get(i));
+        groups.clear();
+        groups.addAll(helperSet);
+//        Set<Integer> helperSet = new HashSet<>();
+//        for (int i = 0; i < groups.size() - 1; i++)
+//            for (int j = i + 1; j < groups.size(); j++)
+//                if (groups.get(i).equals(groups.get(j)))
+//                    helperSet.add(j);
+//
+//        List<Integer> helperList = new ArrayList<>(helperSet);
+//        for (int i = helperList.size() - 1; i >= 0; i--) {
+//            System.out.println("size" + helperList.size());
+//            System.out.println("index" + i);
+//            groups.remove((int) helperList.get(i));
+//        }
     }
 
     private Map<Cell, Integer> checkForClick(List<GroupOfCells> groups) {

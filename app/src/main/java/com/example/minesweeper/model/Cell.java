@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cell {
     private final int x;
@@ -107,5 +108,10 @@ public class Cell {
         if (this.isMined() != ((Cell) other).isMined()) return false;
         if (this.isOpen() != ((Cell) other).isOpen()) return false;
         return this.getNearbyMines().equals(((Cell) other).getNearbyMines());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, marked, mined, open, nearbyMines);
     }
 }

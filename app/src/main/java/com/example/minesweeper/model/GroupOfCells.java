@@ -2,7 +2,10 @@ package com.example.minesweeper.model;
 
 import androidx.annotation.Nullable;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class GroupOfCells {
     private final List<Cell> cells;
@@ -27,5 +30,10 @@ public class GroupOfCells {
         if (this.getGroup().size() != ((GroupOfCells) other).getGroup().size()) return false;
         if (!this.getNumOfMines().equals(((GroupOfCells) other).getNumOfMines())) return false;
         return this.getGroup().containsAll(((GroupOfCells) other).getGroup());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(new HashSet<>(cells), numOfMines);
     }
 }

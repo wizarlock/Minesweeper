@@ -88,13 +88,11 @@ public class Game extends Fragment implements ActionListener {
                 gameIsEnd:
                 while (!map.isEmpty()) {
                     for (Map.Entry<Cell, Integer> entry : map.entrySet()) {
-                        requireActivity().runOnUiThread(() -> {
                             if (entry.getValue() == 0) {
                                 gameBoard.startGame(getCellLayout(entry.getKey()));
                             } else gameBoard.placeFlag(getCellLayout(entry.getKey()));
-                        });
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(5);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -142,14 +140,18 @@ public class Game extends Fragment implements ActionListener {
         super.onDetach();
         binding = null;
         mTimer.cancel();
+        mTimer.purge();
     }
 
     @Override
     public void mineAdded(Cell cell) {
-        FrameLayout layout = getCellLayout(cell);
-        ImageView mineImage = new ImageView(requireContext());
-        mineImage.setImageResource(R.drawable.mine);
-        layout.addView(mineImage);
+        requireActivity().runOnUiThread(() -> {
+
+            FrameLayout layout = getCellLayout(cell);
+            ImageView mineImage = new ImageView(requireContext());
+            mineImage.setImageResource(R.drawable.mine);
+            layout.addView(mineImage);
+        });
     }
 
     @Override
@@ -188,19 +190,23 @@ public class Game extends Fragment implements ActionListener {
                 digitView.setTextColor(getResources().getColor(R.color.eight));
                 break;
         }
-        layout.addView(digitView);
+        requireActivity().runOnUiThread(() -> layout.addView(digitView));
     }
 
     @Override
     public void openCell(Cell cell) {
-        getCellLayout(cell).setBackgroundResource(R.drawable.opencell);
+        requireActivity().runOnUiThread(() ->
+            getCellLayout(cell).setBackgroundResource(R.drawable.opencell)
+        );
     }
 
     @Override
     public void markCell(Cell cell) {
-        getCellLayout(cell).setBackgroundResource(R.drawable.flag);
-        int newText = Integer.parseInt(binding.possibleFlags.getText().toString()) - 1;
-        binding.possibleFlags.setText(Integer.toString(newText));
+        requireActivity().runOnUiThread(() -> {
+            getCellLayout(cell).setBackgroundResource(R.drawable.flag);
+            int newText = Integer.parseInt(binding.possibleFlags.getText().toString()) - 1;
+            binding.possibleFlags.setText(Integer.toString(newText));
+        });
     }
 
     @Override
@@ -221,13 +227,16 @@ public class Game extends Fragment implements ActionListener {
                     ft.commit();
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> requireFragmentManager().popBackStackImmediate());
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        requireActivity().runOnUiThread(() -> {
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
     }
 
     @Override
     public void defeat() {
         mTimer.cancel();
+        mTimer.purge();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("You lost the game. Shall we play again? Time in game: " + getGameTime() + " seconds");
         build(builder);
@@ -236,6 +245,7 @@ public class Game extends Fragment implements ActionListener {
     @Override
     public void winResult() {
         mTimer.cancel();
+        mTimer.purge();
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("You won the game. Shall we play again? Time in game: " + getGameTime() + " seconds");
         build(builder);
