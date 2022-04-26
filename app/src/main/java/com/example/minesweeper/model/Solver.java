@@ -14,17 +14,16 @@ import java.util.Set;
 public class Solver {
     private final int rows;
     private final int columns;
-    private final int mines;
     private boolean firstMove = true;
 
 
-    public Solver(int fieldLength, int fieldHeight, int numOfMines) {
+    public Solver(int fieldLength, int fieldHeight) {
         this.rows = fieldHeight;
         this.columns = fieldLength;
-        this.mines = numOfMines;
     }
 
-    public Map<Cell, Integer> solve(List<List<Cell>> allCells) {
+    public Map.Entry<Cell, Integer> solve(List<List<Cell>> allCells) {
+        Map.Entry<Cell, Integer> answer = null;
         Map<Cell, Integer> solution;
         List<GroupOfCells> groups = createGroups(allCells);
         solution = getSolution(groups);
@@ -37,7 +36,9 @@ public class Solver {
                 randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
             solution.put(randomCell, 0);
         }
-        return solution;
+        for (Map.Entry<Cell, Integer> entry : solution.entrySet())
+            answer = entry;
+        return answer;
     }
 
     //Создает список групп клеток, связанных одним значением открытого поля
@@ -150,7 +151,6 @@ public class Solver {
 
     private void removeAllDuplicates(List<GroupOfCells> groups) {
         Set<GroupOfCells> helperSet = new HashSet<>(groups);
-
         groups.clear();
         groups.addAll(helperSet);
     }
@@ -159,10 +159,13 @@ public class Solver {
         Map<Cell, Integer> solution = new HashMap<>();
         for (GroupOfCells group : groups) {
             if (group.getGroup().size() != 0)
-                if (group.getGroup().size() == group.getNumOfMines())
+                if (group.getGroup().size() == group.getNumOfMines()) {
                     solution.put(group.getGroup().get(0), 1);
-                else if (group.getNumOfMines() == 0)
+                    break;
+                } else if (group.getNumOfMines() == 0) {
                     solution.put(group.getGroup().get(0), 0);
+                    break;
+                }
         }
         return solution;
     }
@@ -171,12 +174,29 @@ public class Solver {
         Map<Cell, Double> cells = new HashMap<>();
         for (GroupOfCells group : groups)
             for (Cell cell : group.getGroup()) {
-                Double value;
-                if ((value = cells.get(cell)) == null)
+                if ((cells.get(cell)) == null)
                     cells.put(cell, (double) group.getNumOfMines() / group.getGroup().size());
-                else
-                    cells.put(cell, 1 - (1 - value) * (1 - group.getNumOfMines() / group.getGroup().size()));
+                else {
+                    double curVal = (double) group.getNumOfMines() / group.getGroup().size();
+                    cells.put(cell, 1 - (1 - cells.get(cell)) * (1 - curVal));
+                }
             }
+        boolean repeat;
+        do {
+            repeat = false;
+            for (GroupOfCells group : groups) {
+                List<Cell> cellsInGroup = group.getGroup();
+                double sum = 0;
+                for (Map.Entry<Cell, Double> entry : cells.entrySet())
+                    if (cellsInGroup.contains(entry.getKey())) sum += entry.getValue();
+                if (Math.abs(sum - group.getNumOfMines()) > 1) {
+                    for (Cell cell : cellsInGroup)
+                        cells.put(cell, cells.get(cell) * (group.getNumOfMines() / sum));
+                    repeat = true;
+                }
+            }
+        } while (repeat);
+
         Cell minCell = null;
         Double minValue = 1.0;
         for (Map.Entry<Cell, Double> entry : cells.entrySet())

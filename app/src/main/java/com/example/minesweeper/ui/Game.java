@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,7 +28,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Game extends Fragment implements ActionListener {
@@ -58,10 +56,8 @@ public class Game extends Fragment implements ActionListener {
         return binding.getRoot();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    private void init() {
+        gameIsEnd = false;
         startTime = System.currentTimeMillis();
         mTimer = new Timer();
         MyTimerTask mMyTimerTask = new MyTimerTask();
@@ -81,27 +77,31 @@ public class Game extends Fragment implements ActionListener {
                     gr.getChildAt(j).setOnLongClickListener(gameBoard::placeFlag);
                 }
         else {
-            Solver gameSolver = new Solver(fieldLength, fieldHeight, numOfMines);
+            Solver gameSolver = new Solver(fieldLength, fieldHeight);
 
             new Thread(() -> {
-                Map<Cell, Integer> map = gameSolver.solve(Board.arrayOfAllCells);
-                gameIsEnd:
-                while (!map.isEmpty()) {
-                    for (Map.Entry<Cell, Integer> entry : map.entrySet()) {
-                            if (entry.getValue() == 0) {
-                                gameBoard.startGame(getCellLayout(entry.getKey()));
-                            } else gameBoard.placeFlag(getCellLayout(entry.getKey()));
-                        try {
-                            Thread.sleep(300);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (gameIsEnd) break gameIsEnd;
+                Map.Entry<Cell, Integer> solution = gameSolver.solve(Board.arrayOfAllCells);
+                while (solution != null) {
+                    if (solution.getValue() == 0)
+                        gameBoard.startGame(getCellLayout(solution.getKey()));
+                    else gameBoard.placeFlag(getCellLayout(solution.getKey()));
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    map = gameSolver.solve(Board.arrayOfAllCells);
+                    if (gameIsEnd) break;
+                    solution = gameSolver.solve(Board.arrayOfAllCells);
                 }
             }).start();
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        init();
     }
 
     public static View findWithTag(ViewGroup parent, Object tag) {
@@ -119,6 +119,7 @@ public class Game extends Fragment implements ActionListener {
 
     private void drawBoard() {
         LinearLayout desk = binding.desk;
+        binding.desk.removeAllViewsInLayout();
         for (int i = 0; i < fieldHeight; i++) {
             LinearLayout linearLayout = new LinearLayout(getContext());
             linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
@@ -138,9 +139,9 @@ public class Game extends Fragment implements ActionListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        binding = null;
         mTimer.cancel();
         mTimer.purge();
+        binding = null;
     }
 
     @Override
@@ -196,7 +197,7 @@ public class Game extends Fragment implements ActionListener {
     @Override
     public void openCell(Cell cell) {
         requireActivity().runOnUiThread(() ->
-            getCellLayout(cell).setBackgroundResource(R.drawable.opencell)
+                getCellLayout(cell).setBackgroundResource(R.drawable.opencell)
         );
     }
 
@@ -220,11 +221,7 @@ public class Game extends Fragment implements ActionListener {
         gameIsEnd = true;
         builder.setCancelable(false)
                 .setPositiveButton("Yes", (dialogInterface, i) -> {
-                    FragmentTransaction ft = requireFragmentManager().beginTransaction();
-                    ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
-                    ft.replace(R.id.frPlace, new Game(fieldLength, fieldHeight, numOfMines, solver));
-                    ft.addToBackStack(null);
-                    ft.commit();
+                    init();
                 })
                 .setNegativeButton("No", (dialogInterface, i) -> requireFragmentManager().popBackStackImmediate());
         requireActivity().runOnUiThread(() -> {
@@ -261,7 +258,8 @@ public class Game extends Fragment implements ActionListener {
         @Override
         public void run() {
             long time = getGameTime();
-            binding.timer.setText(Long.toString(time));
+            if (binding != null)
+                binding.timer.setText(Long.toString(time));
         }
     }
 }
