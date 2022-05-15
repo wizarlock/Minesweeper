@@ -36,8 +36,9 @@ public class SolverTest {
         Board.arrayOfAllCells.get(2).get(1).setNearbyMines(2);
         solution = gameSolver.solve(Board.arrayOfAllCells);
         List<Cell> possibleCell = new ArrayList<>();
-        possibleCell.add(Board.arrayOfAllCells.get(1).get(0));
-        possibleCell.add(Board.arrayOfAllCells.get(0).get(1));
+        possibleCell.add(Board.arrayOfAllCells.get(3).get(0));
+        possibleCell.add(Board.arrayOfAllCells.get(3).get(1));
+        possibleCell.add(Board.arrayOfAllCells.get(3).get(2));
 
         assertTrue(possibleCell.contains(solution.getKey()));
         assertEquals(Integer.toUnsignedLong(solution.getValue()), 0);

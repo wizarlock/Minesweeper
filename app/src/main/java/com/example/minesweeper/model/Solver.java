@@ -24,17 +24,20 @@ public class Solver {
 
     public Map.Entry<Cell, Integer> solve(List<List<Cell>> allCells) {
         Map.Entry<Cell, Integer> answer = null;
-        Map<Cell, Integer> solution;
-        List<GroupOfCells> groups = createGroups(allCells);
-        solution = getSolution(groups);
-        if (firstMove) solution.put(allCells.get(0).get(0), 0);
-        firstMove = false;
-        if (solution.isEmpty()) solution = getSolutionUsingProbability(groups);
-        if (solution.isEmpty()) {
-            Cell randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
-            while (randomCell.isOpen() || randomCell.isMarked())
-                randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
-            solution.put(randomCell, 0);
+        Map<Cell, Integer> solution = new HashMap<>();
+        if (firstMove) {
+            solution.put(allCells.get(0).get(0), 0);
+            firstMove = false;
+        } else {
+            List<GroupOfCells> groups = createGroups(allCells);
+            solution = getSolution(groups);
+            if (solution.isEmpty()) solution = getSolutionUsingProbability(groups);
+            if (solution.isEmpty()) {
+                Cell randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
+                while (randomCell.isOpen() || randomCell.isMarked())
+                    randomCell = allCells.get(new Random().nextInt(rows)).get(new Random().nextInt(columns));
+                solution.put(randomCell, 0);
+            }
         }
         for (Map.Entry<Cell, Integer> entry : solution.entrySet())
             answer = entry;
@@ -88,23 +91,6 @@ public class Solver {
                         groups.set(indexOfParent, subtraction(parent, child));
                         repeat = true;
                         removeAllDuplicates(groups);
-                    } else if (isOverlaps(parent, child)) {
-                        if (groupI.getNumOfMines() > groupJ.getNumOfMines()) {
-                            parent = groupI;
-                            child = groupJ;
-                        } else {
-                            parent = groupJ;
-                            child = groupI;
-                        }
-                        List<GroupOfCells> newGroups = newGroupsDueToCrossing(parent, child);
-                        if (newGroups.size() == 3) {
-                            groups.addAll(newGroups);
-                            groups.remove(j);
-                            groups.remove(i);
-                            i = 0;
-                            j = 0;
-                            removeAllDuplicates(groups);
-                        }
                     }
                     solution = checkForClick(groups);
                     if (!solution.isEmpty()) return solution;
@@ -122,31 +108,6 @@ public class Solver {
                 newCellsForGroup.add(parent.getGroup().get(i));
 
         return new GroupOfCells(newCellsForGroup, parent.getNumOfMines() - child.getNumOfMines());
-    }
-
-    private boolean isOverlaps(GroupOfCells parent, GroupOfCells child) {
-        for (int i = 0; i < child.getGroup().size(); i++)
-            if (parent.getGroup().contains(child.getGroup().get(i)))
-                return true;
-
-        return false;
-    }
-
-    private List<GroupOfCells> newGroupsDueToCrossing(GroupOfCells parent, GroupOfCells child) {
-        List<GroupOfCells> newGroups = new ArrayList<>();
-        List<Cell> newCellsForGroup = new ArrayList<>();
-        for (int i = 0; i < child.getGroup().size(); i++)
-            if (parent.getGroup().contains(child.getGroup().get(i)))
-                newCellsForGroup.add(child.getGroup().get(i));
-
-        GroupOfCells newGroup = new GroupOfCells(newCellsForGroup,
-                parent.getNumOfMines() - (child.getGroup().size() - newCellsForGroup.size()));
-        newGroups.add(newGroup);
-        if (newGroup.getNumOfMines().equals(child.getNumOfMines())) {
-            newGroups.add(subtraction(parent, newGroup));
-            newGroups.add(subtraction(child, newGroup));
-        }
-        return newGroups;
     }
 
     private void removeAllDuplicates(List<GroupOfCells> groups) {
@@ -174,10 +135,10 @@ public class Solver {
         Map<Cell, Double> cells = new HashMap<>();
         for (GroupOfCells group : groups)
             for (Cell cell : group.getGroup()) {
+                double curVal = (double) group.getNumOfMines() / group.getGroup().size();
                 if ((cells.get(cell)) == null)
-                    cells.put(cell, (double) group.getNumOfMines() / group.getGroup().size());
+                    cells.put(cell, curVal);
                 else {
-                    double curVal = (double) group.getNumOfMines() / group.getGroup().size();
                     cells.put(cell, 1 - (1 - cells.get(cell)) * (1 - curVal));
                 }
             }
